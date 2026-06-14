@@ -1,6 +1,6 @@
 {
   "name": "الكلمات القادمة - جمعية الراكة",
-  "short_name": "دروس جمعية الراكة",
+  "short_name": "جمعية الراكة",
   "description": "جدول الكلمات والمحاضرات القادمة للقسم الإعلامي",
   "start_url": "./index.html",
   "display": "standalone",
