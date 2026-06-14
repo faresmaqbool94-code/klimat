@@ -35,8 +35,6 @@ body{font-family:'Tajawal',sans-serif;background:var(--bg);color:var(--text);min
 .stat-chip .lbl{font-size:10px;color:var(--text-muted);margin-top:2px;}
 .sc-all{background:var(--accent-soft);border:1px solid rgba(226,168,75,0.15);}
 .sc-all .num{color:var(--accent);}
-.sc-urg{background:var(--red-soft);border:1px solid rgba(224,92,92,0.15);}
-.sc-urg .num{color:var(--red);}
 .sc-des{background:var(--green-soft);border:1px solid rgba(76,175,125,0.15);}
 .sc-des .num{color:var(--green);}
 .controls{padding:10px 16px;display:flex;gap:8px;}
@@ -98,8 +96,7 @@ body{font-family:'Tajawal',sans-serif;background:var(--bg);color:var(--text);min
   </div>
   <div class="stats-bar">
     <div class="stat-chip sc-all"><div class="num" id="s1">—</div><div class="lbl">كلمة قادمة</div></div>
-    <div class="stat-chip sc-urg"><div class="num" id="s2">—</div><div class="lbl">خلال 3 أيام</div></div>
-    <div class="stat-chip sc-des"><div class="num" id="s3">—</div><div class="lbl">جاهز التصميم</div></div>
+    <div class="stat-chip sc-des"><div class="num" id="s2">—</div><div class="lbl">جاهز التصميم</div></div>
   </div>
 </div>
 <div class="controls">
@@ -113,6 +110,27 @@ body{font-family:'Tajawal',sans-serif;background:var(--bg);color:var(--text);min
 const SID = '1dmh2EZ0BoFR-352eK4tqEezqzyRKIi_9bOMDmZogk6w';
 let rows = [], noDesignOnly = false;
 
+// تحليل تاريخ عمود G — يأتي كنص مثل "15/6/2026" أو Date object
+function parseGregDate(val) {
+  if (!val) return null;
+  const s = String(val).trim();
+  // صيغة Date(year,month,day) من gviz
+  const dm = s.match(/Date\((\d+),(\d+),(\d+)\)/);
+  if (dm) {
+    const d = new Date(parseInt(dm[1]), parseInt(dm[2]), parseInt(dm[3]));
+    d.setHours(0,0,0,0);
+    return d;
+  }
+  // صيغة نصية d/M/yyyy أو dd/MM/yyyy
+  const pm = s.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
+  if (pm) {
+    const d = new Date(parseInt(pm[3]), parseInt(pm[2])-1, parseInt(pm[1]));
+    d.setHours(0,0,0,0);
+    return d;
+  }
+  return null;
+}
+
 async function loadData() {
   document.getElementById('content').innerHTML =
     '<div class="loading"><div class="spinner"></div><p>جارٍ تحميل البيانات...</p></div>';
@@ -122,31 +140,36 @@ async function loadData() {
     const txt = await res.text();
     const json = JSON.parse(txt.match(/setResponse\(([\s\S]*)\)/)[1]);
 
+    const today = new Date();
+    today.setHours(0,0,0,0);
+
     rows = [];
     for (const r of json.table.rows) {
       const c = r.c;
       if (!c) continue;
-      const g = i => (c[i] && c[i].v != null) ? String(c[i].v).trim() : '';
 
-      // عمود K = index 10 = كم يوم متبقي
-      const remVal = g(10);
-      // نتجاهل الصفوف التي مضى تاريخها (قيمة 0 أو سالبة في الجدول)
-      if (!remVal || remVal === '0' || remVal === '0.0') continue;
+      const gVal = (i) => (c[i] && c[i].v != null) ? String(c[i].v).trim() : '';
+      const gRaw = (i) => (c[i] && c[i].v != null) ? c[i].v : null;
+      const gFmt = (i) => (c[i] && c[i].f != null) ? String(c[i].f).trim() : gVal(i);
 
-      // نستخرج الرقم من النص مثل "متبقي 5 أيام" أو "اليوم" أو رقم مباشر
-      let diff = null;
-      if (remVal === 'اليوم') {
-        diff = 0;
-      } else {
-        const match = remVal.match(/(\d+)/);
-        if (match) diff = parseInt(match[1]);
-        else continue;
+      // عمود G = index 6 = التاريخ الميلادي
+      // القيمة الخام قد تكون Date object أو نص
+      let dateRaw = gRaw(6);
+      let eventDate = null;
+
+      if (dateRaw) {
+        // gviz يرسل التاريخ كنص "Date(2026,5,15)" أحياناً
+        const fmtDate = gFmt(6); // الصيغة المنسقة مثل "15/6/2026"
+        eventDate = parseGregDate(fmtDate) || parseGregDate(String(dateRaw));
       }
 
-      if (diff < 0) continue;
+      if (!eventDate) continue;
 
-      const designLink = g(14); // عمود O
-      const archiveVal = g(13); // عمود N
+      const diff = Math.round((eventDate - today) / 86400000);
+      if (diff < 0) continue; // ماضٍ
+
+      const designLink = gVal(14); // عمود O
+      const archiveVal = gVal(13); // عمود N
       const hasDesign = designLink.length > 0 || archiveVal.includes('تمت') || archiveVal.includes('✅');
       let imgUrl = null;
       if (designLink.includes('drive.google.com')) {
@@ -154,20 +177,21 @@ async function loadData() {
         if (id) imgUrl = `https://drive.google.com/thumbnail?id=${id}&sz=w600`;
       }
 
+      const dateDisplay = gFmt(6) || gVal(6);
+
       rows.push({
-        diff,
-        type: g(1), title: g(3), sheikh: g(4),
-        day: g(5), dateGreg: g(6), dateHijri: g(7),
-        time: g(8), location: g(9),
-        designer: g(11), notes: g(12),
+        diff, eventDate, dateDisplay,
+        type: gVal(1), title: gVal(3), sheikh: gVal(4),
+        day: gVal(5), dateHijri: gVal(7),
+        time: gVal(8), location: gVal(9),
+        designer: gVal(11), notes: gVal(12),
         designLink, hasDesign, imgUrl
       });
     }
 
     rows.sort((a,b) => a.diff - b.diff);
     document.getElementById('s1').textContent = rows.length;
-    document.getElementById('s2').textContent = rows.filter(r=>r.diff<=3).length;
-    document.getElementById('s3').textContent = rows.filter(r=>r.hasDesign).length;
+    document.getElementById('s2').textContent = rows.filter(r=>r.hasDesign).length;
     render();
 
     const n = new Date();
@@ -249,7 +273,7 @@ function render() {
         ${r.notes?`<span class="notes-chip">📝 ${r.notes}</span>`:''}
       </div>
       <div class="card-footer">
-        <div class="date-display">🗓️ ${r.dateHijri||''}${r.dateGreg?' · '+r.dateGreg:''}${r.day?' · '+r.day:''}</div>
+        <div class="date-display">🗓️ ${r.dateHijri||''}${r.dateDisplay?' · '+r.dateDisplay:''}${r.day?' · '+r.day:''}</div>
         ${r.designer?`<div class="designer-chip">🎨 ${r.designer}</div>`:''}
       </div>
     </div>`;
