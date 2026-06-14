@@ -110,23 +110,30 @@ body{font-family:'Tajawal',sans-serif;background:var(--bg);color:var(--text);min
 const SID = '1dmh2EZ0BoFR-352eK4tqEezqzyRKIi_9bOMDmZogk6w';
 let rows = [], noDesignOnly = false;
 
-// تحليل تاريخ عمود G — يأتي كنص مثل "15/6/2026" أو Date object
-function parseGregDate(val) {
-  if (!val) return null;
-  const s = String(val).trim();
-  // صيغة Date(year,month,day) من gviz
-  const dm = s.match(/Date\((\d+),(\d+),(\d+)\)/);
-  if (dm) {
-    const d = new Date(parseInt(dm[1]), parseInt(dm[2]), parseInt(dm[3]));
-    d.setHours(0,0,0,0);
-    return d;
+// تحليل تاريخ عمود G
+// gviz يرسل التاريخ كـ Date(year,month,day) حيث month يبدأ من 0
+// والصيغة المنسقة f تكون M/d/yyyy (أمريكي) مثل 6/14/2026
+function parseGregDate(rawStr, fmtStr) {
+  // نجرب الصيغة المنسقة أولاً: M/d/yyyy
+  if (fmtStr) {
+    const s = String(fmtStr).trim();
+    const pm = s.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
+    if (pm) {
+      // صيغة أمريكية: month/day/year
+      const d = new Date(parseInt(pm[3]), parseInt(pm[1])-1, parseInt(pm[2]));
+      d.setHours(0,0,0,0);
+      return d;
+    }
   }
-  // صيغة نصية d/M/yyyy أو dd/MM/yyyy
-  const pm = s.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
-  if (pm) {
-    const d = new Date(parseInt(pm[3]), parseInt(pm[2])-1, parseInt(pm[1]));
-    d.setHours(0,0,0,0);
-    return d;
+  // نجرب القيمة الخام: Date(year,month,day)
+  if (rawStr) {
+    const s = String(rawStr).trim();
+    const dm = s.match(/Date\((\d+),(\d+),(\d+)\)/);
+    if (dm) {
+      const d = new Date(parseInt(dm[1]), parseInt(dm[2]), parseInt(dm[3]));
+      d.setHours(0,0,0,0);
+      return d;
+    }
   }
   return null;
 }
@@ -158,12 +165,22 @@ async function loadData() {
       let eventDate = null;
 
       if (dateRaw) {
-        // gviz يرسل التاريخ كنص "Date(2026,5,15)" أحياناً
-        const fmtDate = gFmt(6); // الصيغة المنسقة مثل "15/6/2026"
-        eventDate = parseGregDate(fmtDate) || parseGregDate(String(dateRaw));
+        const s = String(dateRaw);
+        // gviz يرسل التواريخ كـ "Date(year,month,day)" حيث الشهر يبدأ من 0
+        const dm = s.match(/Date\((\d+),(\d+),(\d+)\)/);
+        if (dm) {
+          eventDate = new Date(parseInt(dm[1]), parseInt(dm[2]), parseInt(dm[3]));
+          eventDate.setHours(0,0,0,0);
+        } else {
+          eventDate = parseGregDate(s, gFmt(6));
+        }
       }
 
       if (!eventDate) continue;
+
+      // تجاهل الصفوف بدون عنوان
+      const titleCheck = gVal(3);
+      if (!titleCheck) continue;
 
       const diff = Math.round((eventDate - today) / 86400000);
       if (diff < 0) continue; // ماضٍ
