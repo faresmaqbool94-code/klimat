@@ -1,143 +1,199 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="ar" dir="rtl" data-theme="dark">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#1a1a2e">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="جدول الإعلام">
-<title>الكلمات القادمة</title>
+<meta name="apple-mobile-web-app-title" content="الراكة الدعوية">
+<title>كلمات ودروس جمعية الراكة</title>
 <link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="logo.png">
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;800&display=swap');
-:root {
+@import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap');
+
+/* ===== الثيم الداكن ===== */
+[data-theme="dark"] {
   --bg:#0f0f1a; --surface:#1a1a2e; --card:#16213e;
-  --accent:#e2a84b; --accent-soft:rgba(226,168,75,0.12);
+  --accent:#c8a96e; --accent-soft:rgba(200,169,110,0.12);
   --green:#4caf7d; --green-soft:rgba(76,175,125,0.12);
   --red:#e05c5c; --red-soft:rgba(224,92,92,0.12);
   --orange:#f0883e; --orange-soft:rgba(240,136,62,0.12);
   --text:#eef0f5; --text-muted:#8892a4;
-  --border:rgba(255,255,255,0.06); --radius:16px;
+  --border:rgba(255,255,255,0.06);
+  --header-bg:linear-gradient(135deg,#1a1a2e,#16213e);
+  --theme-icon: "☀️";
 }
+
+/* ===== الثيم الفاتح ===== */
+[data-theme="light"] {
+  --bg:#f0f2f5; --surface:#ffffff; --card:#ffffff;
+  --accent:#3d5a8a; --accent-soft:rgba(61,90,138,0.1);
+  --green:#2e7d52; --green-soft:rgba(46,125,82,0.1);
+  --red:#c0392b; --red-soft:rgba(192,57,43,0.1);
+  --orange:#d35400; --orange-soft:rgba(211,84,0,0.1);
+  --text:#1a1a2e; --text-muted:#5a6a7a;
+  --border:rgba(0,0,0,0.08);
+  --header-bg:linear-gradient(135deg,#3d5a8a,#2c4270);
+  --theme-icon: "🌙";
+}
+
 *{margin:0;padding:0;box-sizing:border-box;}
-body{font-family:'Tajawal',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;}
-.header{background:linear-gradient(135deg,#1a1a2e,#16213e);border-bottom:1px solid var(--border);padding:20px 16px 14px;position:sticky;top:0;z-index:100;}
+body{font-family:'Tajawal',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;transition:background .3s,color .3s;}
+
+/* ===== الهيدر ===== */
+.header{background:var(--header-bg);border-bottom:1px solid var(--border);padding:16px 16px 14px;position:sticky;top:0;z-index:100;box-shadow:0 2px 12px rgba(0,0,0,0.15);}
 .header-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
-.logo{display:flex;align-items:center;gap:10px;}
-.logo-icon{width:38px;height:38px;background:linear-gradient(135deg,var(--accent),#c8872a);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;}
-.logo-text h1{font-size:15px;font-weight:700;}
-.logo-text p{font-size:11px;color:var(--text-muted);}
-.refresh-btn{width:36px;height:36px;background:var(--accent-soft);border:1px solid rgba(226,168,75,0.2);border-radius:10px;color:var(--accent);font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+
+.logo-area{display:flex;align-items:center;gap:10px;}
+.logo-img{width:42px;height:42px;border-radius:10px;object-fit:contain;background:white;padding:3px;}
+.logo-text h1{font-size:14px;font-weight:800;color:#fff;line-height:1.2;}
+.logo-text p{font-size:10px;color:rgba(255,255,255,0.7);margin-top:1px;}
+
+.header-btns{display:flex;gap:8px;}
+.icon-btn{width:36px;height:36px;background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.2);border-radius:10px;color:#fff;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .2s;}
+.icon-btn:active{background:rgba(255,255,255,0.25);}
+
+/* ===== إحصائيات ===== */
 .stats-bar{display:flex;gap:8px;}
-.stat-chip{flex:1;border-radius:10px;padding:8px 6px;text-align:center;}
-.stat-chip .num{font-size:18px;font-weight:800;line-height:1;}
-.stat-chip .lbl{font-size:10px;color:var(--text-muted);margin-top:2px;}
-.sc-all{background:var(--accent-soft);border:1px solid rgba(226,168,75,0.15);}
-.sc-all .num{color:var(--accent);}
-.sc-des{background:var(--green-soft);border:1px solid rgba(76,175,125,0.15);}
-.sc-des .num{color:var(--green);}
+.stat-chip{flex:1;border-radius:10px;padding:8px 6px;text-align:center;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.15);}
+.stat-chip .num{font-size:18px;font-weight:800;color:#fff;line-height:1;}
+.stat-chip .lbl{font-size:10px;color:rgba(255,255,255,0.7);margin-top:2px;}
+
+/* ===== بحث وفلتر ===== */
 .controls{padding:10px 16px;display:flex;gap:8px;}
-.search-box{flex:1;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:10px 14px;color:var(--text);font-family:'Tajawal',sans-serif;font-size:14px;outline:none;}
-.search-box:focus{border-color:rgba(226,168,75,0.4);}
+.search-box{flex:1;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:10px 14px;color:var(--text);font-family:'Tajawal',sans-serif;font-size:14px;outline:none;transition:border-color .2s;}
+.search-box:focus{border-color:var(--accent);}
 .search-box::placeholder{color:var(--text-muted);}
-.filter-btn{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:10px 12px;color:var(--text-muted);font-family:'Tajawal',sans-serif;font-size:12px;cursor:pointer;white-space:nowrap;}
-.filter-btn.active{background:var(--accent-soft);border-color:rgba(226,168,75,0.3);color:var(--accent);}
+.filter-btn{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:10px 12px;color:var(--text-muted);font-family:'Tajawal',sans-serif;font-size:12px;cursor:pointer;white-space:nowrap;transition:all .2s;}
+.filter-btn.active{background:var(--accent-soft);border-color:var(--accent);color:var(--accent);}
+
+/* ===== البطاقات ===== */
 .cards-container{padding:4px 16px 100px;display:flex;flex-direction:column;gap:12px;}
-.section-label{font-size:11px;font-weight:700;color:var(--text-muted);padding:14px 0 4px;}
-.card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;}
+.section-label{font-size:11px;font-weight:700;color:var(--text-muted);padding:14px 0 4px;letter-spacing:.3px;}
+
+.card{background:var(--card);border:1px solid var(--border);border-radius:16px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.06);transition:box-shadow .2s;}
+[data-theme="light"] .card{box-shadow:0 2px 12px rgba(0,0,0,0.08);}
 .card.c-urgent{border-color:rgba(224,92,92,0.35);}
 .card.c-soon{border-color:rgba(240,136,62,0.3);}
-.card.c-week{border-color:rgba(226,168,75,0.2);}
+.card.c-week{border-color:var(--accent);border-opacity:.2;}
+
 .card-header{padding:14px 14px 10px;display:flex;align-items:flex-start;gap:10px;}
-.days-badge{min-width:54px;height:54px;border-radius:12px;display:flex;flex-direction:column;align-items:center;justify-content:center;flex-shrink:0;}
-.bd-today{background:var(--red-soft);}  .bd-today .dn,.bd-today .dl{color:var(--red);}
-.bd-urgent{background:var(--red-soft);} .bd-urgent .dn,.bd-urgent .dl{color:var(--red);}
-.bd-soon{background:var(--orange-soft);}.bd-soon .dn,.bd-soon .dl{color:var(--orange);}
-.bd-week{background:var(--accent-soft);}.bd-week .dn,.bd-week .dl{color:var(--accent);}
-.bd-far{background:var(--green-soft);}  .bd-far .dn,.bd-far .dl{color:var(--green);}
-.dn{font-size:20px;font-weight:800;line-height:1;}
-.dl{font-size:9px;opacity:.85;}
+.days-badge{min-width:56px;height:56px;border-radius:12px;display:flex;flex-direction:column;align-items:center;justify-content:center;flex-shrink:0;}
+.bd-today{background:var(--red-soft);}   .bd-today .dn,.bd-today .dl{color:var(--red);}
+.bd-urgent{background:var(--red-soft);}  .bd-urgent .dn,.bd-urgent .dl{color:var(--red);}
+.bd-soon{background:var(--orange-soft);} .bd-soon .dn,.bd-soon .dl{color:var(--orange);}
+.bd-week{background:var(--accent-soft);} .bd-week .dn,.bd-week .dl{color:var(--accent);}
+.bd-far{background:var(--green-soft);}   .bd-far .dn,.bd-far .dl{color:var(--green);}
+.dn{font-size:19px;font-weight:800;line-height:1;}
+.dl{font-size:9px;opacity:.85;margin-top:1px;}
+
 .card-info{flex:1;min-width:0;}
-.card-title{font-size:14px;font-weight:700;line-height:1.4;margin-bottom:6px;}
+.card-title{font-size:14px;font-weight:700;line-height:1.4;margin-bottom:4px;}
+.permit-num{font-size:10px;color:var(--text-muted);margin-bottom:6px;direction:ltr;text-align:right;}
 .card-meta{display:flex;flex-wrap:wrap;gap:5px;}
-.meta-tag{font-size:11px;color:var(--text-muted);background:rgba(255,255,255,0.04);padding:3px 7px;border-radius:6px;}
+.meta-tag{font-size:11px;color:var(--text-muted);background:var(--accent-soft);padding:3px 8px;border-radius:6px;}
+
 .card-footer{padding:8px 14px;display:flex;align-items:center;justify-content:space-between;border-top:1px solid var(--border);}
 .date-display{font-size:11px;color:var(--text-muted);}
-.designer-chip{font-size:11px;padding:3px 10px;border-radius:20px;background:var(--accent-soft);color:var(--accent);}
+.designer-chip{font-size:11px;padding:3px 10px;border-radius:20px;background:var(--accent-soft);color:var(--accent);font-weight:500;}
+
 .design-wrap{padding:0 14px 10px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
-.toggle-btn{background:none;border:1px solid var(--border);border-radius:8px;color:var(--text-muted);font-family:'Tajawal',sans-serif;font-size:11px;cursor:pointer;padding:5px 10px;}
-.toggle-btn.has{border-color:rgba(76,175,125,0.3);color:var(--green);}
+.toggle-btn{background:none;border:1px solid var(--border);border-radius:8px;color:var(--text-muted);font-family:'Tajawal',sans-serif;font-size:11px;cursor:pointer;padding:5px 10px;transition:all .2s;}
+.toggle-btn.has{border-color:var(--green);color:var(--green);background:var(--green-soft);}
 .design-section{overflow:hidden;max-height:0;transition:max-height .35s ease;}
 .design-section.open{max-height:500px;}
 .design-img{width:100%;display:block;max-height:320px;object-fit:contain;background:#0a0a15;border-top:1px solid var(--border);}
+[data-theme="light"] .design-img{background:#f8f8f8;}
 .notes-chip{font-size:10px;color:var(--text-muted);font-style:italic;}
+
+/* ===== Loading / Empty / Error ===== */
 .loading{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:60vh;gap:16px;}
 .spinner{width:40px;height:40px;border:3px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin .8s linear infinite;}
 @keyframes spin{to{transform:rotate(360deg);}}
 .loading p{color:var(--text-muted);font-size:14px;}
 .empty{text-align:center;padding:60px 20px;color:var(--text-muted);}
 .empty .emoji{font-size:48px;margin-bottom:12px;}
-.error-box{margin:20px 16px;background:var(--red-soft);border:1px solid rgba(224,92,92,0.2);border-radius:var(--radius);padding:16px;font-size:13px;color:var(--red);line-height:1.7;}
-.fab{position:fixed;bottom:24px;left:16px;width:44px;height:44px;background:var(--accent);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;cursor:pointer;box-shadow:0 4px 20px rgba(226,168,75,.4);color:#1a1a2e;font-weight:bold;border:none;}
+.error-box{margin:20px 16px;background:var(--red-soft);border:1px solid rgba(224,92,92,0.2);border-radius:16px;padding:16px;font-size:13px;color:var(--red);line-height:1.7;}
+
+/* ===== FAB ===== */
+.fab{position:fixed;bottom:24px;left:16px;width:44px;height:44px;background:var(--accent);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;cursor:pointer;box-shadow:0 4px 20px rgba(0,0,0,0.2);color:#fff;font-weight:bold;border:none;}
 </style>
 </head>
 <body>
+
 <div class="header">
   <div class="header-top">
-    <div class="logo">
-      <div class="logo-icon">🎙️</div>
+    <div class="logo-area">
+      <img class="logo-img" src="logo.png" alt="شعار الراكة">
       <div class="logo-text">
-        <h1>الكلمات القادمة</h1>
+        <h1>كلمات ودروس الراكة</h1>
         <p id="last-update">جمعية الراكة الدعوية</p>
       </div>
     </div>
-    <button class="refresh-btn" onclick="loadData()">↻</button>
+    <div class="header-btns">
+      <button class="icon-btn" id="theme-btn" onclick="toggleTheme()" title="تغيير الثيم">☀️</button>
+      <button class="icon-btn" onclick="loadData()" title="تحديث">↻</button>
+    </div>
   </div>
   <div class="stats-bar">
-    <div class="stat-chip sc-all"><div class="num" id="s1">—</div><div class="lbl">كلمة قادمة</div></div>
-    <div class="stat-chip sc-des"><div class="num" id="s2">—</div><div class="lbl">جاهز التصميم</div></div>
+    <div class="stat-chip"><div class="num" id="s1">—</div><div class="lbl">كلمة قادمة</div></div>
+    <div class="stat-chip"><div class="num" id="s2">—</div><div class="lbl">جاهز الإعلان</div></div>
   </div>
 </div>
+
 <div class="controls">
-  <input class="search-box" type="text" placeholder="🔍  بحث..." id="q" oninput="render()">
-  <button class="filter-btn" id="fb" onclick="toggleFilter()">بدون تصميم</button>
+  <input class="search-box" type="text" placeholder="🔍  بحث بالعنوان أو الشيخ أو الموقع..." id="q" oninput="render()">
+  <button class="filter-btn" id="fb" onclick="toggleFilter()">بدون إعلان</button>
 </div>
-<div id="content"><div class="loading"><div class="spinner"></div><p>جارٍ تحميل البيانات...</p></div></div>
+
+<div id="content">
+  <div class="loading"><div class="spinner"></div><p>جارٍ تحميل البيانات...</p></div>
+</div>
 <button class="fab" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
 
 <script>
 const SID = '1dmh2EZ0BoFR-352eK4tqEezqzyRKIi_9bOMDmZogk6w';
 let rows = [], noDesignOnly = false;
 
-// تحليل تاريخ عمود G
-// gviz يرسل التاريخ كـ Date(year,month,day) حيث month يبدأ من 0
-// والصيغة المنسقة f تكون M/d/yyyy (أمريكي) مثل 6/14/2026
+// ===== الثيم =====
+function initTheme() {
+  const saved = localStorage.getItem('theme') || 'dark';
+  document.documentElement.setAttribute('data-theme', saved);
+  document.getElementById('theme-btn').textContent = saved === 'dark' ? '☀️' : '🌙';
+}
+function toggleTheme() {
+  const curr = document.documentElement.getAttribute('data-theme');
+  const next = curr === 'dark' ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', next);
+  localStorage.setItem('theme', next);
+  document.getElementById('theme-btn').textContent = next === 'dark' ? '☀️' : '🌙';
+}
+initTheme();
+
+// ===== قراءة التاريخ =====
 function parseGregDate(rawStr, fmtStr) {
-  // نجرب الصيغة المنسقة أولاً: M/d/yyyy
   if (fmtStr) {
     const s = String(fmtStr).trim();
     const pm = s.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
     if (pm) {
-      // صيغة أمريكية: month/day/year
       const d = new Date(parseInt(pm[3]), parseInt(pm[1])-1, parseInt(pm[2]));
-      d.setHours(0,0,0,0);
-      return d;
+      d.setHours(0,0,0,0); return d;
     }
   }
-  // نجرب القيمة الخام: Date(year,month,day)
   if (rawStr) {
     const s = String(rawStr).trim();
     const dm = s.match(/Date\((\d+),(\d+),(\d+)\)/);
     if (dm) {
       const d = new Date(parseInt(dm[1]), parseInt(dm[2]), parseInt(dm[3]));
-      d.setHours(0,0,0,0);
-      return d;
+      d.setHours(0,0,0,0); return d;
     }
   }
   return null;
 }
 
+// ===== تحميل البيانات =====
 async function loadData() {
   document.getElementById('content').innerHTML =
     '<div class="loading"><div class="spinner"></div><p>جارٍ تحميل البيانات...</p></div>';
@@ -147,46 +203,25 @@ async function loadData() {
     const txt = await res.text();
     const json = JSON.parse(txt.match(/setResponse\(([\s\S]*)\)/)[1]);
 
-    const today = new Date();
-    today.setHours(0,0,0,0);
-
+    const today = new Date(); today.setHours(0,0,0,0);
     rows = [];
+
     for (const r of json.table.rows) {
       const c = r.c;
       if (!c) continue;
+      const gVal = i => (c[i] && c[i].v != null) ? String(c[i].v).trim() : '';
+      const gRaw = i => (c[i] && c[i].v != null) ? c[i].v : null;
+      const gFmt = i => (c[i] && c[i].f != null) ? String(c[i].f).trim() : gVal(i);
 
-      const gVal = (i) => (c[i] && c[i].v != null) ? String(c[i].v).trim() : '';
-      const gRaw = (i) => (c[i] && c[i].v != null) ? c[i].v : null;
-      const gFmt = (i) => (c[i] && c[i].f != null) ? String(c[i].f).trim() : gVal(i);
-
-      // عمود G = index 6 = التاريخ الميلادي
-      // القيمة الخام قد تكون Date object أو نص
-      let dateRaw = gRaw(6);
-      let eventDate = null;
-
-      if (dateRaw) {
-        const s = String(dateRaw);
-        // gviz يرسل التواريخ كـ "Date(year,month,day)" حيث الشهر يبدأ من 0
-        const dm = s.match(/Date\((\d+),(\d+),(\d+)\)/);
-        if (dm) {
-          eventDate = new Date(parseInt(dm[1]), parseInt(dm[2]), parseInt(dm[3]));
-          eventDate.setHours(0,0,0,0);
-        } else {
-          eventDate = parseGregDate(s, gFmt(6));
-        }
-      }
-
+      // عمود G = index 6
+      const eventDate = parseGregDate(String(gRaw(6) || ''), gFmt(6));
       if (!eventDate) continue;
 
-      // تجاهل الصفوف بدون عنوان
-      const titleCheck = gVal(3);
-      if (!titleCheck) continue;
-
       const diff = Math.round((eventDate - today) / 86400000);
-      if (diff < 0) continue; // ماضٍ
+      if (diff < 0) continue;
 
-      const designLink = gVal(14); // عمود O
-      const archiveVal = gVal(13); // عمود N
+      const designLink = gVal(14);
+      const archiveVal = gVal(13);
       const hasDesign = designLink.length > 0 || archiveVal.includes('تمت') || archiveVal.includes('✅');
       let imgUrl = null;
       if (designLink.includes('drive.google.com')) {
@@ -194,11 +229,11 @@ async function loadData() {
         if (id) imgUrl = `https://drive.google.com/thumbnail?id=${id}&sz=w600`;
       }
 
-      const dateDisplay = gFmt(6) || gVal(6);
-
       rows.push({
-        diff, eventDate, dateDisplay,
-        type: gVal(1), title: gVal(3), sheikh: gVal(4),
+        diff, dateDisplay: gFmt(6) || gVal(6),
+        type: gVal(1),
+        permitNum: gVal(2),   // رقم الفسح = عمود C
+        title: gVal(3), sheikh: gVal(4),
         day: gVal(5), dateHijri: gVal(7),
         time: gVal(8), location: gVal(9),
         designer: gVal(11), notes: gVal(12),
@@ -223,14 +258,14 @@ async function loadData() {
 function toggleFilter() {
   noDesignOnly = !noDesignOnly;
   document.getElementById('fb').classList.toggle('active', noDesignOnly);
-  document.getElementById('fb').textContent = noDesignOnly ? '✓ بدون تصميم' : 'بدون تصميم';
+  document.getElementById('fb').textContent = noDesignOnly ? '✓ بدون إعلان' : 'بدون إعلان';
   render();
 }
 
 function render() {
   const q = document.getElementById('q').value.trim().toLowerCase();
   const filtered = rows.filter(r => {
-    const ms = !q || [r.title,r.sheikh,r.location,r.type].some(x=>x.toLowerCase().includes(q));
+    const ms = !q || [r.title,r.sheikh,r.location,r.type,r.permitNum].some(x=>x.toLowerCase().includes(q));
     return ms && (!noDesignOnly || !r.hasDesign);
   });
 
@@ -255,10 +290,10 @@ function render() {
     const dayLbl = r.diff<=1?'':' يوم';
 
     const designBtn = r.imgUrl
-      ? `<button class="toggle-btn has" onclick="toggleImg(event,${i})">🖼️ عرض التصميم ▾</button>`
+      ? `<button class="toggle-btn has" onclick="toggleImg(event,${i})">🖼️ عرض الإعلان ▾</button>`
       : r.designLink
-      ? `<a class="toggle-btn has" style="text-decoration:none" href="${r.designLink}" target="_blank">🔗 فتح التصميم</a>`
-      : `<span class="toggle-btn" style="opacity:.4;pointer-events:none">لا يوجد تصميم</span>`;
+      ? `<a class="toggle-btn has" style="text-decoration:none" href="${r.designLink}" target="_blank">🔗 فتح الإعلان</a>`
+      : `<span class="toggle-btn" style="opacity:.4;pointer-events:none">لا يوجد إعلان</span>`;
 
     const imgSec = r.imgUrl
       ? `<div class="design-section" id="ds${i}">
@@ -276,6 +311,7 @@ function render() {
         </div>
         <div class="card-info">
           <div class="card-title">${r.title||'—'}</div>
+          ${r.permitNum?`<div class="permit-num">رقم الفسح: ${r.permitNum}</div>`:''}
           <div class="card-meta">
             ${r.sheikh?`<span class="meta-tag">🎤 ${r.sheikh}</span>`:''}
             ${r.location?`<span class="meta-tag">📍 ${r.location}</span>`:''}
@@ -305,7 +341,7 @@ function toggleImg(e,i) {
   if (!s) return;
   s.classList.toggle('open');
   e.currentTarget.textContent = s.classList.contains('open')
-    ? '🖼️ إخفاء التصميم ▴' : '🖼️ عرض التصميم ▾';
+    ? '🖼️ إخفاء الإعلان ▴' : '🖼️ عرض الإعلان ▾';
 }
 
 loadData();
