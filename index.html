@@ -104,9 +104,53 @@ body{font-family:'Tajawal',sans-serif;background:var(--bg);color:var(--text);min
 .toggle-btn.has{border-color:var(--green);color:var(--green);background:var(--green-soft);}
 .design-section{overflow:hidden;max-height:0;transition:max-height .35s ease;}
 .design-section.open{max-height:500px;}
-.design-img{width:100%;display:block;max-height:320px;object-fit:contain;background:#0a0a15;border-top:1px solid var(--border);}
+
+.design-img{width:100%;display:block;max-height:320px;object-fit:contain;background:#0a0a15;border-top:1px solid var(--border);cursor:pointer;transition:transform 0.2s;}
+.design-img:hover{transform: scale(1.01);}
+
 [data-theme="light"] .design-img{background:#f8f8f8;}
 .notes-chip{font-size:10px;color:var(--text-muted);font-style:italic;}
+
+/* ===== النافذة المنبثقة لعرض الصورة داخل التطبيق ===== */
+.image-modal {
+  display: none;
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background-color: rgba(0, 0, 0, 0.85);
+  z-index: 2000;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+.image-modal.active {
+  display: flex;
+  opacity: 1;
+}
+.modal-content {
+  max-width: 92%;
+  max-height: 85vh;
+  object-fit: contain;
+  border-radius: 12px;
+  box-shadow: 0 4px 25px rgba(0,0,0,0.5);
+  transform: scale(0.9);
+  transition: transform 0.3s ease;
+}
+.image-modal.active .modal-content {
+  transform: scale(1);
+}
+.close-modal {
+  position: absolute;
+  top: 20px; right: 20px;
+  width: 40px; height: 40px;
+  background: rgba(255,255,255,0.2);
+  border: none; border-radius: 50%;
+  color: white; font-size: 20px; font-weight: bold;
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  transition: background 0.2s;
+}
+.close-modal:hover { background: rgba(255,255,255,0.4); }
 
 /* ===== Loading / Empty / Error ===== */
 .loading{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:60vh;gap:16px;}
@@ -152,6 +196,11 @@ body{font-family:'Tajawal',sans-serif;background:var(--bg);color:var(--text);min
   <div class="loading"><div class="spinner"></div><p>جارٍ تحميل البيانات...</p></div>
 </div>
 <button class="fab" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+
+<div id="imageModal" class="image-modal" onclick="closeImage()">
+  <button class="close-modal">&times;</button>
+  <img id="modalImg" class="modal-content" src="" alt="الإعلان بالحجم الكامل" onclick="event.stopPropagation()">
+</div>
 
 <script>
 const SID = '1dmh2EZ0BoFR-352eK4tqEezqzyRKIi_9bOMDmZogk6w';
@@ -295,9 +344,11 @@ function render() {
       ? `<a class="toggle-btn has" style="text-decoration:none" href="${r.designLink}" target="_blank">🔗 فتح الإعلان</a>`
       : `<span class="toggle-btn" style="opacity:.4;pointer-events:none">لا يوجد إعلان</span>`;
 
+    // تعديل هنا: عند الضغط على الصورة يتم تشغيل دالة openImage() لعرضها منبثقة داخل الصفحة
     const imgSec = r.imgUrl
       ? `<div class="design-section" id="ds${i}">
-           <img class="design-img" src="${r.imgUrl}"
+           <img class="design-img" src="${r.imgUrl}" title="اضغط لتكبير الإعلان"
+             onclick="openImage('${r.imgUrl}')"
              onerror="this.outerHTML='<div style=padding:12px;text-align:center;font-size:12px;color:var(--text-muted)>⚠️ تعذّر عرض الصورة — <a href=${r.designLink} target=_blank style=color:var(--accent)>فتح الرابط</a></div>'"
              loading="lazy">
          </div>` : '';
@@ -342,6 +393,19 @@ function toggleImg(e,i) {
   s.classList.toggle('open');
   e.currentTarget.textContent = s.classList.contains('open')
     ? '🖼️ إخفاء الإعلان ▴' : '🖼️ عرض الإعلان ▾';
+}
+
+// دالتين للتحكم في فتح وإغلاق الصورة المنبثقة
+function openImage(url) {
+  const modal = document.getElementById('imageModal');
+  const modalImg = document.getElementById('modalImg');
+  modalImg.src = url;
+  modal.classList.add('active');
+}
+
+function closeImage() {
+  const modal = document.getElementById('imageModal');
+  modal.classList.remove('active');
 }
 
 loadData();
