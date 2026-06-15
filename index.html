@@ -10,6 +10,7 @@
 <title>كلمات ودروس جمعية الراكة</title>
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="logo.png">
+<!-- مكتبة Font Awesome للأيقونات -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap');
@@ -281,8 +282,31 @@ body{
 .empty .emoji{font-size:48px;margin-bottom:12px;}
 .error-box{margin:20px 16px;background:var(--red-soft);border:1px solid rgba(224,92,92,0.2);border-radius:16px;padding:16px;font-size:13px;color:var(--red);line-height:1.7;}
 
-/* ===== FAB ===== */
-.fab{position:fixed;bottom:80px;left:16px;width:44px;height:44px;background:var(--accent);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;cursor:pointer;box-shadow:0 4px 20px rgba(0,0,0,0.2);color:#fff;font-weight:bold;border:none;z-index:99;}
+/* ===== FAB الزر العائم للأعلى (مخفي افتراضياً) ===== */
+.fab {
+  position: fixed;
+  bottom: 80px; left: 16px;
+  width: 44px; height: 44px;
+  background: var(--accent);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  cursor: pointer;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+  color: #fff;
+  font-weight: bold;
+  border: none;
+  z-index: 99;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+.fab.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
 </style>
 </head>
 <body>
@@ -290,6 +314,7 @@ body{
 <div class="app-outer">
   <div class="app-container" id="appContainer">
     
+    <!-- ================= الصفحة الأولى: الدروس ================= -->
     <div class="page" id="lessonsPage">
       <div class="header">
         <div class="header-top">
@@ -319,9 +344,11 @@ body{
       <div id="content">
         <div class="loading"><div class="spinner"></div><p>جارٍ تحميل البيانات...</p></div>
       </div>
-      <button class="fab" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+      <!-- السهم تم نقله وتحديث كود التحكم به -->
+      <button class="fab" id="scrollTopBtn" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
     </div>
 
+    <!-- ================= الصفحة الثانية: التواصل ================= -->
     <div class="page" id="contactPage">
       <div class="header">
         <div class="header-top">
@@ -344,6 +371,7 @@ body{
           <p>يسعدنا تواصلكم معنا عبر المنصات التالية</p>
         </div>
 
+        <!-- شريط أيقونات التواصل الاجتماعي الجديد -->
         <div class="contact-icons-row">
 
           <a href="https://wa.me/966557584477" target="_blank" class="icon-link">
@@ -378,6 +406,7 @@ body{
   </div>
 </div>
 
+<!-- ===== شريط التنقل السفلي الثابت ===== -->
 <div class="bottom-nav">
   <button class="nav-item active" id="btnNavLessons" onclick="switchPage('lessons')">
     <i>📚</i>
@@ -389,6 +418,7 @@ body{
   </button>
 </div>
 
+<!-- النافذة المنبثقة للصور -->
 <div id="imageModal" class="image-modal" onclick="closeImage()">
   <button class="close-modal">&times;</button>
   <img id="modalImg" class="modal-content" src="" alt="الإعلان بالحجم الكامل" onclick="event.stopPropagation()">
@@ -397,25 +427,40 @@ body{
 <script>
 const SID = '1dmh2EZ0BoFR-352eK4tqEezqzyRKIi_9bOMDmZogk6w';
 let rows = [], noDesignOnly = false;
+let currentPage = 'lessons'; // متغير لتتبع الصفحة النشطة حالياً
 
 // ===== إصلاح الـ Slide الفعلي المتوافق مع الـ RTL للجوال =====
 function switchPage(pageName) {
   const container = document.getElementById('appContainer');
   const btnLessons = document.getElementById('btnNavLessons');
   const btnContact = document.getElementById('btnNavContact');
+  currentPage = pageName;
   
   if (pageName === 'lessons') {
     container.style.transform = 'translateX(0%)';
     btnLessons.classList.add('active');
     btnContact.classList.remove('active');
     window.scrollTo({top: 0});
+    handleScroll(); // تحديث حالة السهم مباشرة عند الرجوع للدروس
   } else if (pageName === 'contact') {
     container.style.transform = 'translateX(50%)'; 
     btnContact.classList.add('active');
     btnLessons.classList.remove('active');
     window.scrollTo({top: 0});
+    document.getElementById('scrollTopBtn').classList.remove('visible'); // إخفاء السهم في صفحة التواصل دائماً
   }
 }
+
+// ===== التحكم بظهور وإخفاء السهم عند النزول لقائمة الدروس فقط =====
+function handleScroll() {
+  const scrollBtn = document.getElementById('scrollTopBtn');
+  if (currentPage === 'lessons' && window.scrollY > 200) {
+    scrollBtn.classList.add('visible');
+  } else {
+    scrollBtn.classList.remove('visible');
+  }
+}
+window.addEventListener('scroll', handleScroll);
 
 // ===== الثيم =====
 function initTheme() {
