@@ -64,15 +64,15 @@ body{
 }
 .app-container {
   display: flex;
-  width: 200%; /* الحاوية تحتضن صفحتين جنبًا إلى جنب */
+  width: 200%;
   min-height: 100vh;
   transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 .page {
-  width: 50%; /* كل صفحة تأخذ نصف الـ 200% أي 100% من عرض الشاشة الفعلي */
+  width: 50%;
   flex-shrink: 0;
   box-sizing: border-box;
-  padding-bottom: 90px; /* مساحة مريحة للبار السفلي */
+  padding-bottom: 90px;
 }
 
 /* ===== الهيدر ===== */
@@ -88,13 +88,25 @@ body{
 .icon-btn{width:36px;height:36px;background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.2);border-radius:10px;color:#fff;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .2s;}
 .icon-btn:active{background:rgba(255,255,255,0.25);}
 
+/* زِر التثبيت في الهيدر */
+.btn-install-nav {
+  background: var(--accent) !important;
+  border-color: var(--accent) !important;
+  animation: pulse 2s infinite;
+}
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
 /* ===== إحصائيات ===== */
 .stats-bar{display:flex;gap:8px;}
 .stat-chip{flex:1;border-radius:10px;padding:8px 6px;text-align:center;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.15);}
 .stat-chip .num{font-size:18px;font-weight:800;color:#fff;line-height:1;}
 .stat-chip .lbl{font-size:10px;color:rgba(255,255,255,0.7);margin-top:2px;}
 
-/* ===== إصلاح مخرجات البحث والفلتر ===== */
+/* ===== مخرجات البحث والفلتر ===== */
 .controls{padding:10px 16px; display:flex; gap:8px;}
 .search-box{flex:1;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:10px 14px;color:var(--text);font-family:'Tajawal',sans-serif;font-size:14px;outline:none;transition:border-color .2s;}
 .search-box:focus{border-color:var(--accent);}
@@ -144,7 +156,7 @@ body{
 [data-theme="light"] .design-img{background:#f8f8f8;}
 .notes-chip{font-size:10px;color:var(--text-muted);font-style:italic;}
 
-/* ===== صفحة التواصل (تنسيق شريط الأيقونات الجديد) ===== */
+/* ===== صفحة التواصل ===== */
 .contact-container {
   padding: 24px 16px;
   display: flex;
@@ -232,7 +244,7 @@ body{
   color: var(--accent);
 }
 
-/* ===== النافذة المنبثقة لعرض الصورة ===== */
+/* ===== النافذة المنبثقة العامة (للصورة ولتعليمات الآيفون) ===== */
 .image-modal {
   display: none;
   position: fixed;
@@ -269,9 +281,29 @@ body{
   border: none; border-radius: 50%;
   color: white; font-size: 20px; font-weight: bold;
   cursor: pointer; display: flex; align-items: center; justify-content: center;
-  transition: background 0.2s;
+  z-index: 2001;
 }
-.close-modal:hover { background: rgba(255,255,255,0.4); }
+
+/* نافذة تعليمات الآيفون المخصصة */
+.ios-instructions-card {
+  background: var(--surface);
+  border: 2px solid var(--accent);
+  border-radius: 20px;
+  padding: 24px;
+  width: 88%;
+  max-width: 400px;
+  color: var(--text);
+  text-align: center;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+  transform: scale(0.9);
+  transition: transform 0.3s ease;
+}
+.image-modal.active .ios-instructions-card { transform: scale(1); }
+.ios-instructions-card h3 { font-size: 18px; margin-bottom: 14px; color: var(--accent); font-weight: 800; }
+.ios-instructions-card p { font-size: 14px; line-height: 1.6; margin-bottom: 16px; color: var(--text); }
+.ios-step { display: flex; align-items: center; gap: 12px; background: var(--card); padding: 10px 14px; border-radius: 12px; margin-bottom: 10px; text-align: right; font-size: 13px; border: 1px solid var(--border); }
+.ios-step i { font-size: 18px; color: var(--accent); width: 24px; text-align: center; }
+.ios-btn-done { background: var(--accent); color: #fff; border: none; padding: 10px 24px; border-radius: 10px; font-family: 'Tajawal', sans-serif; font-size: 14px; font-weight: 700; cursor: pointer; margin-top: 10px; width: 100%; }
 
 /* ===== Loading / Empty / Error ===== */
 .loading{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:60vh;gap:16px;}
@@ -282,7 +314,7 @@ body{
 .empty .emoji{font-size:48px;margin-bottom:12px;}
 .error-box{margin:20px 16px;background:var(--red-soft);border:1px solid rgba(224,92,92,0.2);border-radius:16px;padding:16px;font-size:13px;color:var(--red);line-height:1.7;}
 
-/* ===== FAB الزر العائم للأعلى (مخفي افتراضياً) ===== */
+/* ===== FAB ===== */
 .fab {
   position: fixed;
   bottom: 80px; left: 16px;
@@ -326,6 +358,8 @@ body{
             </div>
           </div>
           <div class="header-btns">
+            <!-- زر التثبيت الذكي المضاف بجانب زر الثيم -->
+            <button class="icon-btn btn-install-nav" onclick="handleInstallClick()" title="تحميل التطبيق"><i class="fa-solid fa-download"></i></button>
             <button class="icon-btn" id="theme-btn" onclick="toggleTheme()" title="تغيير الثيم">☀️</button>
             <button class="icon-btn" onclick="loadData()" title="تحديث">↻</button>
           </div>
@@ -344,7 +378,6 @@ body{
       <div id="content">
         <div class="loading"><div class="spinner"></div><p>جارٍ تحميل البيانات...</p></div>
       </div>
-      <!-- السهم تم نقله وتحديث كود التحكم به -->
       <button class="fab" id="scrollTopBtn" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
     </div>
 
@@ -360,6 +393,8 @@ body{
             </div>
           </div>
           <div class="header-btns">
+            <!-- زر التثبيت الذكي المضاف في صفحة التواصل أيضاً -->
+            <button class="icon-btn btn-install-nav" onclick="handleInstallClick()" title="تحميل التطبيق"><i class="fa-solid fa-download"></i></button>
             <button class="icon-btn" id="theme-btn-contact" onclick="toggleTheme()" title="تغيير الثيم">☀️</button>
           </div>
         </div>
@@ -371,35 +406,15 @@ body{
           <p>يسعدنا تواصلكم معنا عبر المنصات التالية</p>
         </div>
 
-        <!-- شريط أيقونات التواصل الاجتماعي الجديد -->
+        <!-- شريط أيقونات التواصل الاجتماعي -->
         <div class="contact-icons-row">
-
-          <a href="https://wa.me/966557584477" target="_blank" class="icon-link">
-            <i class="fa-brands fa-whatsapp" style="color: #4caf7d;"></i>
-          </a>
-
-          <a href="tel:0557584477" class="icon-link">
-            <i class="fa-solid fa-phone" style="color: #3d5a8a;"></i>
-          </a>
-
-          <a href="https://www.youtube.com/channel/UCW-ewVbC8vGdOf2cV9JgmtA" target="_blank" class="icon-link">
-            <i class="fa-brands fa-youtube" style="color: #ff0000;"></i>
-          </a>
-
-          <a href="https://twitter.com/TawnieRaka" target="_blank" class="icon-link">
-            <i class="fa-brands fa-x-twitter"></i>
-          </a>
-
-          <a href="https://www.facebook.com/Alrakah1445" target="_blank" class="icon-link">
-            <i class="fa-brands fa-facebook-f" style="color: #1877f2;"></i>
-          </a>
-
-          <a href="https://store.dawah-rakah.org.sa/" target="_blank" class="icon-link">
-            <i class="fa-solid fa-globe" style="color: #c8a96e;"></i>
-          </a>
-
+          <a href="https://wa.me/966557584477" target="_blank" class="icon-link"><i class="fa-brands fa-whatsapp" style="color: #4caf7d;"></i></a>
+          <a href="tel:0580956015" class="icon-link"><i class="fa-solid fa-phone" style="color: #3d5a8a;"></i></a>
+          <a href="https://www.youtube.com/channel/UCW-ewVbC8vGdOf2cV9JgmtA" target="_blank" class="icon-link"><i class="fa-brands fa-youtube" style="color: #ff0000;"></i></a>
+          <a href="https://twitter.com/TawnieRaka" target="_blank" class="icon-link"><i class="fa-brands fa-x-twitter"></i></a>
+          <a href="https://www.facebook.com/Alrakah1445" target="_blank" class="icon-link"><i class="fa-brands fa-facebook-f" style="color: #1877f2;"></i></a>
+          <a href="https://store.dawah-rakah.org.sa/" target="_blank" class="icon-link"><i class="fa-solid fa-globe" style="color: #c8a96e;"></i></a>
         </div>
-
       </div>
     </div>
 
@@ -418,16 +433,95 @@ body{
   </button>
 </div>
 
-<!-- النافذة المنبثقة للصور -->
-<div id="imageModal" class="image-modal" onclick="closeImage()">
-  <button class="close-modal">&times;</button>
-  <img id="modalImg" class="modal-content" src="" alt="الإعلان بالحجم الكامل" onclick="event.stopPropagation()">
+<!-- النافذة المنبثقة العامة (للصور ولتعليمات الآيفون) -->
+<div id="generalModal" class="image-modal" onclick="closeModal()">
+  <button class="close-modal" onclick="closeModal()">&times;</button>
+  
+  <!-- محتوى الصورة (يظهر عند تكبير الإعلان) -->
+  <img id="modalImg" class="modal-content" src="" alt="الإعلان بالحجم الكامل" onclick="event.stopPropagation()" style="display:none;">
+  
+  <!-- محتوى تعليمات الآيفون (يظهر عند الضغط على زر التنزيل من جهاز iOS) -->
+  <div id="iosInstructions" class="ios-instructions-card" onclick="event.stopPropagation()" style="display:none;">
+    <h3>تثبيت التطبيق على الآيفون</h3>
+    <p>نظام iOS يتطلب التثبيت يدوياً عبر متصفح سفاري باتباع الخطوات البسيطة التالية:</p>
+    
+    <div class="ios-step">
+      <i class="fa-solid fa-arrow-up-from-bracket"></i>
+      <span>1. اضغط على زر <b>المشاركة</b> في شريط سفاري السفلي.</span>
+    </div>
+    
+    <div class="ios-step">
+      <i class="fa-regular fa-square-plus"></i>
+      <span>2. قم بالتمرير لأسفل واختر <b>إضافة إلى الصفحة الرئيسية</b>.</span>
+    </div>
+    
+    <div class="ios-step">
+      <i class="fa-solid fa-check"></i>
+      <span>3. اضغط على <b>إضافة</b> في أعلى اليسار لتجد التطبيق في جهازك.</span>
+    </div>
+    
+    <button class="ios-btn-done" onclick="closeModal()">فهمت</button>
+  </div>
 </div>
 
 <script>
 const SID = '1dmh2EZ0BoFR-352eK4tqEezqzyRKIi_9bOMDmZogk6w';
 let rows = [], noDesignOnly = false;
-let currentPage = 'lessons'; // متغير لتتبع الصفحة النشطة حالياً
+let currentPage = 'lessons';
+let deferredPrompt = null;
+
+// التقاط حدث التثبيت التلقائي للأندرويد والكمبيوتر
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+});
+
+// ميكانيكية الزر الذكي عند الضغط عليه
+function handleInstallClick() {
+  // 1. فحص ما إذا كان الجهاز آيفون أو آيباد (iOS)
+  const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+  
+  if (isIOS) {
+    // إظهار نافذة التعليمات المخصصة للآيفون
+    const modal = document.getElementById('generalModal');
+    document.getElementById('modalImg').style.display = 'none';
+    document.getElementById('iosInstructions').style.display = 'block';
+    modal.classList.add('active');
+  } else {
+    // لأجهزة الأندرويد والكمبيوتر: تشغيل ميزة التنزيل إذا كانت جاهزة
+    if (deferredPrompt) {
+      deferredPrompt.prompt();
+      deferredPrompt.userChoice.then((choiceResult) => {
+        if (choiceResult.outcome === 'accepted') {
+          console.log('User accepted the PWA install');
+        }
+        deferredPrompt = null;
+      });
+    } else {
+      // تلميح بديل إذا لم يكن الحدث جاهزاً بعد أو كان التطبيق مثبتاً بالفعل
+      alert('ميزة التثبيت التلقائي مدعومة بالكامل عبر متصفح Google Chrome الرسمي، إذا لم تظهر لك النافذة يمكنك الضغط على خيارات المتصفح (⋮) ثم اختيار "تثبيت التطبيق".');
+    }
+  }
+}
+
+function openImage(url) {
+  const modal = document.getElementById('generalModal');
+  document.getElementById('iosInstructions').style.display = 'none';
+  const modalImg = document.getElementById('modalImg');
+  modalImg.src = url;
+  modalImg.style.display = 'block';
+  modal.classList.add('active');
+}
+
+function closeModal() {
+  const modal = document.getElementById('generalModal');
+  modal.classList.remove('active');
+  setTimeout(() => { 
+    document.getElementById('modalImg').src = ''; 
+    document.getElementById('modalImg').style.display = 'none';
+    document.getElementById('iosInstructions').style.display = 'none';
+  }, 300);
+}
 
 // ===== إصلاح الـ Slide الفعلي المتوافق مع الـ RTL للجوال =====
 function switchPage(pageName) {
@@ -441,17 +535,16 @@ function switchPage(pageName) {
     btnLessons.classList.add('active');
     btnContact.classList.remove('active');
     window.scrollTo({top: 0});
-    handleScroll(); // تحديث حالة السهم مباشرة عند الرجوع للدروس
+    handleScroll();
   } else if (pageName === 'contact') {
     container.style.transform = 'translateX(50%)'; 
     btnContact.classList.add('active');
     btnLessons.classList.remove('active');
     window.scrollTo({top: 0});
-    document.getElementById('scrollTopBtn').classList.remove('visible'); // إخفاء السهم في صفحة التواصل دائماً
+    document.getElementById('scrollTopBtn').classList.remove('visible');
   }
 }
 
-// ===== التحكم بظهور وإخفاء السهم عند النزول لقائمة الدروس فقط =====
 function handleScroll() {
   const scrollBtn = document.getElementById('scrollTopBtn');
   if (currentPage === 'lessons' && window.scrollY > 200) {
@@ -655,20 +748,6 @@ function toggleImg(e,i) {
   s.classList.toggle('open');
   e.currentTarget.textContent = s.classList.contains('open')
     ? '🖼️ إخفاء الإعلان ▴' : '🖼️ عرض الإعلان ▾';
-}
-
-function openImage(url) {
-  const modal = document.getElementById('imageModal');
-  const modalImg = document.getElementById('modalImg');
-  modalImg.src = url;
-  modal.classList.add('active');
-}
-
-function closeImage() {
-  const modal = document.getElementById('imageModal');
-  const modalImg = document.getElementById('modalImg');
-  modal.classList.remove('active');
-  setTimeout(() => { modalImg.src = ''; }, 300);
 }
 
 loadData();
