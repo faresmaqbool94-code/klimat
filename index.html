@@ -10,6 +10,7 @@
 <title>كلمات ودروس جمعية الراكة</title>
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="logo.png">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap');
 
@@ -25,6 +26,8 @@
   --header-bg:linear-gradient(135deg,#1a1a2e,#16213e);
   --theme-icon: "☀️";
   --nav-bg: #1a1a2e;
+  --icon-color: rgba(255,255,255,0.75);
+  --icon-hover: #fff;
 }
 
 /* ===== الثيم الفاتح ===== */
@@ -39,6 +42,8 @@
   --header-bg:linear-gradient(135deg,#3d5a8a,#2c4270);
   --theme-icon: "🌙";
   --nav-bg: #ffffff;
+  --icon-color: rgba(0,0,0,0.6);
+  --icon-hover: var(--accent);
 }
 
 *{margin:0;padding:0;box-sizing:border-box;}
@@ -138,7 +143,7 @@ body{
 [data-theme="light"] .design-img{background:#f8f8f8;}
 .notes-chip{font-size:10px;color:var(--text-muted);font-style:italic;}
 
-/* ===== صفحة التواصل ===== */
+/* ===== صفحة التواصل (تنسيق شريط الأيقونات الجديد) ===== */
 .contact-container {
   padding: 24px 16px;
   display: flex;
@@ -161,53 +166,35 @@ body{
   color: var(--text-muted);
   margin-top: 4px;
 }
-.contact-row-btn {
+
+.contact-icons-row {
   display: flex;
+  justify-content: space-between;
   align-items: center;
-  gap: 16px;
+  gap: 18px;
+  padding: 30px 20px;
+  flex-wrap: nowrap;
   background: var(--card);
-  padding: 16px 20px;
+  border: 1px solid var(--border);
   border-radius: 16px;
-  text-decoration: none;
-  color: var(--text);
   box-shadow: 0 4px 10px rgba(0,0,0,0.04);
-  transition: transform 0.2s, background 0.2s;
-}
-.contact-row-btn:active {
-  transform: scale(0.98);
-  background: var(--accent-soft);
-}
-.contact-icon-wrapper {
-  width: 44px;
-  height: 44px;
-  border-radius: 12px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 20px;
-  flex-shrink: 0;
-}
-.contact-info-text {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-.contact-label {
-  font-size: 14px;
-  font-weight: 700;
-}
-.contact-value {
-  font-size: 11px;
-  color: var(--text-muted);
 }
 
-/* ألوان مخصصة لأيقونات التواصل */
-.bg-store { background: rgba(200,169,110,0.15); color: #c8a96e; }
-.bg-whatsapp { background: rgba(76,175,125,0.15); color: #4caf7d; }
-.bg-phone { background: rgba(61,90,138,0.15); color: #3d5a8a; }
-.bg-twitter { background: rgba(29,161,242,0.15); color: #1da1f2; }
-.bg-facebook { background: rgba(24,119,242,0.15); color: #1877f2; }
-.bg-youtube { background: rgba(255,0,0,0.15); color: #ff0000; }
+.icon-link {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 26px;
+  color: var(--icon-color);
+  text-decoration: none;
+  transition: 0.2s;
+}
+
+.icon-link:active {
+  transform: scale(0.9);
+  color: var(--icon-hover);
+}
 
 /* ===== شريط التنقل السفلي الثابت ===== */
 .bottom-nav {
@@ -303,7 +290,6 @@ body{
 <div class="app-outer">
   <div class="app-container" id="appContainer">
     
-    <!-- ================= الصفحة الأولى: الدروس ================= -->
     <div class="page" id="lessonsPage">
       <div class="header">
         <div class="header-top">
@@ -336,7 +322,6 @@ body{
       <button class="fab" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
     </div>
 
-    <!-- ================= الصفحة الثانية: التواصل ================= -->
     <div class="page" id="contactPage">
       <div class="header">
         <div class="header-top">
@@ -359,59 +344,33 @@ body{
           <p>يسعدنا تواصلكم معنا عبر المنصات التالية</p>
         </div>
 
-        <!-- متجر الجمعية -->
-        <a href="https://store.dawah-rakah.org.sa/" target="_blank" class="contact-row-btn">
-          <div class="contact-icon-wrapper bg-store">🛒</div>
-          <div class="contact-info-text">
-            <span class="contact-label">الموقع الإلكتروني والمنصة</span>
-            <span class="contact-value">store.dawah-rakah.org.sa</span>
-          </div>
-        </a>
+        <div class="contact-icons-row">
 
-        <!-- واتساب -->
-        <a href="https://wa.me/966557584477" target="_blank" class="contact-row-btn">
-          <div class="contact-icon-wrapper bg-whatsapp">💬</div>
-          <div class="contact-info-text">
-            <span class="contact-label">واتساب الجمعية</span>
-            <span class="contact-value">0557584477</span>
-          </div>
-        </a>
+          <a href="https://wa.me/966557584477" target="_blank" class="icon-link">
+            <i class="fa-brands fa-whatsapp" style="color: #4caf7d;"></i>
+          </a>
 
-        <!-- اتصال هاتفي -->
-        <a href="tel:0580956015" class="contact-row-btn">
-          <div class="contact-icon-wrapper bg-phone">📞</div>
-          <div class="contact-info-text">
-            <span class="contact-label">رقم الاتصال المباشر</span>
-            <span class="contact-value">058 095 6015</span>
-          </div>
-        </a>
+          <a href="tel:0580956015" class="icon-link">
+            <i class="fa-solid fa-phone" style="color: #3d5a8a;"></i>
+          </a>
 
-        <!-- تويتر / إكس -->
-        <a href="https://twitter.com/TawnieRaka" target="_blank" class="contact-row-btn">
-          <div class="contact-icon-wrapper bg-twitter">🐦</div>
-          <div class="contact-info-text">
-            <span class="contact-label">منصة X (تويتر سابقاً)</span>
-            <span class="contact-value">@TawnieRaka</span>
-          </div>
-        </a>
+          <a href="https://www.youtube.com/channel/UCW-ewVbC8vGdOf2cV9JgmtA" target="_blank" class="icon-link">
+            <i class="fa-brands fa-youtube" style="color: #ff0000;"></i>
+          </a>
 
-        <!-- فيسبوك -->
-        <a href="https://www.facebook.com/Alrakah1445" target="_blank" class="contact-row-btn">
-          <div class="contact-icon-wrapper bg-facebook">📘</div>
-          <div class="contact-info-text">
-            <span class="contact-label">حساب الفيسبوك</span>
-            <span class="contact-value">Alrakah1445</span>
-          </div>
-        </a>
+          <a href="https://twitter.com/TawnieRaka" target="_blank" class="icon-link">
+            <i class="fa-brands fa-x-twitter"></i>
+          </a>
 
-        <!-- يوتيوب -->
-        <a href="https://www.youtube.com/channel/UCW-ewVbC8vGdOf2cV9JgmtA" target="_blank" class="contact-row-btn">
-          <div class="contact-icon-wrapper bg-youtube">📺</div>
-          <div class="contact-info-text">
-            <span class="contact-label">قناة اليوتيوب</span>
-            <span class="contact-value">جمعية الراكة الدعوية</span>
-          </div>
-        </a>
+          <a href="https://www.facebook.com/Alrakah1445" target="_blank" class="icon-link">
+            <i class="fa-brands fa-facebook-f" style="color: #1877f2;"></i>
+          </a>
+
+          <a href="https://store.dawah-rakah.org.sa/" target="_blank" class="icon-link">
+            <i class="fa-solid fa-globe" style="color: #c8a96e;"></i>
+          </a>
+
+        </div>
 
       </div>
     </div>
@@ -419,7 +378,6 @@ body{
   </div>
 </div>
 
-<!-- ===== شريط التنقل السفلي الثابت ===== -->
 <div class="bottom-nav">
   <button class="nav-item active" id="btnNavLessons" onclick="switchPage('lessons')">
     <i>📚</i>
@@ -431,7 +389,6 @@ body{
   </button>
 </div>
 
-<!-- النافذة المنبثقة للصور -->
 <div id="imageModal" class="image-modal" onclick="closeImage()">
   <button class="close-modal">&times;</button>
   <img id="modalImg" class="modal-content" src="" alt="الإعلان بالحجم الكامل" onclick="event.stopPropagation()">
@@ -448,14 +405,11 @@ function switchPage(pageName) {
   const btnContact = document.getElementById('btnNavContact');
   
   if (pageName === 'lessons') {
-    // في الـ RTL القيمة 0 تعيدنا للصفحة الأولى (اليمين) بشكل ثابت
     container.style.transform = 'translateX(0%)';
     btnLessons.classList.add('active');
     btnContact.classList.remove('active');
     window.scrollTo({top: 0});
   } else if (pageName === 'contact') {
-    // بما أن الصفحة الثانية على اليسار، نتحرك 50% باتجاه اليسار (موجب في الـ RTL لبعض المتصفحات)
-    // لتفادي الفروقات بين المتصفحات، الـ 50% الموجبة هنا تعني إزاحة نصف الحاوية لرؤية الصفحة الثانية
     container.style.transform = 'translateX(50%)'; 
     btnContact.classList.add('active');
     btnLessons.classList.remove('active');
@@ -564,7 +518,7 @@ async function loadData() {
       `آخر تحديث: ${n.getHours()}:${String(n.getMinutes()).padStart(2,'0')}`;
   } catch(e) {
     document.getElementById('content').innerHTML =
-      `<div class="error-box">⚠️ تعذّر تحميل البيانات<br><br>تأكد من الاتصال بالإنترنت ثم اضغط ↻<br><small>${e.message}</small></div>`;
+      `<div class="error-box">⚠️ تعذّر تحميل البيانات<br><br>تأكد من الاتصال بالإنترنت then اضغط ↻<br><small>${e.message}</small></div>`;
   }
 }
 
@@ -669,7 +623,7 @@ function closeImage() {
   const modal = document.getElementById('imageModal');
   const modalImg = document.getElementById('modalImg');
   modal.classList.remove('active');
-  setTimeout(() => { modalImg.src = ''; }, 300); // تفريغ الذاكرة بعد غلق المودال
+  setTimeout(() => { modalImg.src = ''; }, 300);
 }
 
 loadData();
