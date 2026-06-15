@@ -24,6 +24,7 @@
   --border:rgba(255,255,255,0.06);
   --header-bg:linear-gradient(135deg,#1a1a2e,#16213e);
   --theme-icon: "☀️";
+  --nav-bg: #1a1a2e;
 }
 
 /* ===== الثيم الفاتح ===== */
@@ -37,10 +38,25 @@
   --border:rgba(0,0,0,0.08);
   --header-bg:linear-gradient(135deg,#3d5a8a,#2c4270);
   --theme-icon: "🌙";
+  --nav-bg: #ffffff;
 }
 
 *{margin:0;padding:0;box-sizing:border-box;}
-body{font-family:'Tajawal',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;transition:background .3s,color .3s;}
+body{font-family:'Tajawal',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;transition:background .3s,color .3s;overflow-x:hidden;}
+
+/* ===== هيكل الصفحات المنزلقة ===== */
+.app-container {
+  display: flex;
+  width: 200%;
+  min-height: 100vh;
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.page {
+  width: 50%;
+  flex-shrink: 0;
+  box-sizing: border-box;
+  padding-bottom: 80px; /* مساحة للبار السفلي */
+}
 
 /* ===== الهيدر ===== */
 .header{background:var(--header-bg);border-bottom:1px solid var(--border);padding:16px 16px 14px;position:sticky;top:0;z-index:100;box-shadow:0 2px 12px rgba(0,0,0,0.15);}
@@ -62,7 +78,7 @@ body{font-family:'Tajawal',sans-serif;background:var(--bg);color:var(--text);min
 .stat-chip .lbl{font-size:10px;color:rgba(255,255,255,0.7);margin-top:2px;}
 
 /* ===== بحث وفلتر ===== */
-.controls{padding:10px 16px;display:flex;gap:8px;}
+.controls{padding:10px 166px; padding:10px 16px; display:flex;gap:8px;}
 .search-box{flex:1;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:10px 14px;color:var(--text);font-family:'Tajawal',sans-serif;font-size:14px;outline:none;transition:border-color .2s;}
 .search-box:focus{border-color:var(--accent);}
 .search-box::placeholder{color:var(--text-muted);}
@@ -70,7 +86,7 @@ body{font-family:'Tajawal',sans-serif;background:var(--bg);color:var(--text);min
 .filter-btn.active{background:var(--accent-soft);border-color:var(--accent);color:var(--accent);}
 
 /* ===== البطاقات ===== */
-.cards-container{padding:4px 16px 100px;display:flex;flex-direction:column;gap:12px;}
+.cards-container{padding:4px 16px 40px;display:flex;flex-direction:column;gap:12px;}
 .section-label{font-size:11px;font-weight:700;color:var(--text-muted);padding:14px 0 4px;letter-spacing:.3px;}
 
 .card{background:var(--card);border:1px solid var(--border);border-radius:16px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.06);transition:box-shadow .2s;}
@@ -85,7 +101,7 @@ body{font-family:'Tajawal',sans-serif;background:var(--bg);color:var(--text);min
 .bd-urgent{background:var(--red-soft);}  .bd-urgent .dn,.bd-urgent .dl{color:var(--red);}
 .bd-soon{background:var(--orange-soft);} .bd-soon .dn,.bd-soon .dl{color:var(--orange);}
 .bd-week{background:var(--accent-soft);} .bd-week .dn,.bd-week .dl{color:var(--accent);}
-.bd-far{background:var(--green-soft);}   .bd-far .dn,.bd-far .dl{color:var(--green);}
+.bd-far{background:var(--green-soft);}    .bd-far .dn,.bd-far .dl{color:var(--green);}
 .dn{font-size:19px;font-weight:800;line-height:1;}
 .dl{font-size:9px;opacity:.85;margin-top:1px;}
 
@@ -111,7 +127,113 @@ body{font-family:'Tajawal',sans-serif;background:var(--bg);color:var(--text);min
 [data-theme="light"] .design-img{background:#f8f8f8;}
 .notes-chip{font-size:10px;color:var(--text-muted);font-style:italic;}
 
-/* ===== النافذة المنبثقة لعرض الصورة داخل التطبيق ===== */
+/* ===== صفحة التواصل (بدون خطوط عمود واحد مرتب) ===== */
+.contact-container {
+  padding: 24px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-width: 500px;
+  margin: 0 auto;
+}
+.contact-header-block {
+  text-align: center;
+  margin-bottom: 12px;
+}
+.contact-header-block h2 {
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--accent);
+}
+.contact-header-block p {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-top: 4px;
+}
+.contact-row-btn {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: var(--card);
+  padding: 16px 20px;
+  border-radius: 16px;
+  text-decoration: none;
+  color: var(--text);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.04);
+  transition: transform 0.2s, background 0.2s;
+}
+.contact-row-btn:active {
+  transform: scale(0.98);
+  background: var(--accent-soft);
+}
+.contact-icon-wrapper {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  flex-shrink: 0;
+}
+.contact-info-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.contact-label {
+  font-size: 14px;
+  font-weight: 700;
+}
+.contact-value {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+/* ألوان مخصصة لأيقونات التواصل */
+.bg-store { background: rgba(200,169,110,0.15); color: #c8a96e; }
+.bg-whatsapp { background: rgba(76,175,125,0.15); color: #4caf7d; }
+.bg-phone { background: rgba(61,90,138,0.15); color: #3d5a8a; }
+.bg-twitter { background: rgba(29,161,242,0.15); color: #1da1f2; }
+.bg-facebook { background: rgba(24,119,242,0.15); color: #1877f2; }
+.bg-youtube { background: rgba(255,0,0,0.15); color: #ff0000; }
+
+/* ===== أزرار الملاحة السفلية (Bottom Navigation) ===== */
+.bottom-nav {
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  height: 64px;
+  background: var(--nav-bg);
+  border-top: 1px solid var(--border);
+  display: flex;
+  z-index: 1000;
+  box-shadow: 0 -4px 12px rgba(0,0,0,0.08);
+}
+.nav-item {
+  flex: 1;
+  background: none;
+  border: none;
+  outline: none;
+  font-family: 'Tajawal', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-muted);
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  transition: color 0.2s;
+}
+.nav-item i {
+  font-size: 18px;
+}
+.nav-item.active {
+  color: var(--accent);
+}
+
+/* ===== النافذة المنبثقة لعرض الصورة ===== */
 .image-modal {
   display: none;
   position: fixed;
@@ -162,41 +284,141 @@ body{font-family:'Tajawal',sans-serif;background:var(--bg);color:var(--text);min
 .error-box{margin:20px 16px;background:var(--red-soft);border:1px solid rgba(224,92,92,0.2);border-radius:16px;padding:16px;font-size:13px;color:var(--red);line-height:1.7;}
 
 /* ===== FAB ===== */
-.fab{position:fixed;bottom:24px;left:16px;width:44px;height:44px;background:var(--accent);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;cursor:pointer;box-shadow:0 4px 20px rgba(0,0,0,0.2);color:#fff;font-weight:bold;border:none;}
+.fab{position:fixed;bottom:80px;left:16px;width:44px;height:44px;background:var(--accent);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;cursor:pointer;box-shadow:0 4px 20px rgba(0,0,0,0.2);color:#fff;font-weight:bold;border:none;z-index:99;}
 </style>
 </head>
 <body>
 
-<div class="header">
-  <div class="header-top">
-    <div class="logo-area">
-      <img class="logo-img" src="logo.png" alt="شعار الراكة">
-      <div class="logo-text">
-        <h1>كلمات ودروس الراكة</h1>
-        <p id="last-update">جمعية الراكة الدعوية</p>
+<div class="app-container" id="appContainer">
+  
+  <!-- ================= الصفحة الأولى: الدروس ================= -->
+  <div class="page" id="lessonsPage">
+    <div class="header">
+      <div class="header-top">
+        <div class="logo-area">
+          <img class="logo-img" src="logo.png" alt="شعار الراكة">
+          <div class="logo-text">
+            <h1>كلمات ودروس الراكة</h1>
+            <p id="last-update">جمعية الراكة الدعوية</p>
+          </div>
+        </div>
+        <div class="header-btns">
+          <button class="icon-btn" id="theme-btn" onclick="toggleTheme()" title="تغيير الثيم">☀️</button>
+          <button class="icon-btn" onclick="loadData()" title="تحديث">↻</button>
+        </div>
+      </div>
+      <div class="stats-bar">
+        <div class="stat-chip"><div class="num" id="s1">—</div><div class="lbl">كلمة قادمة</div></div>
+        <div class="stat-chip"><div class="num" id="s2">—</div><div class="lbl">جاهز الإعلان</div></div>
       </div>
     </div>
-    <div class="header-btns">
-      <button class="icon-btn" id="theme-btn" onclick="toggleTheme()" title="تغيير الثيم">☀️</button>
-      <button class="icon-btn" onclick="loadData()" title="تحديث">↻</button>
+
+    <div class="controls">
+      <input class="search-box" type="text" placeholder="🔍  بحث بالعنوان أو الشيخ أو الموقع..." id="q" oninput="render()">
+      <button class="filter-btn" id="fb" onclick="toggleFilter()">بدون إعلان</button>
+    </div>
+
+    <div id="content">
+      <div class="loading"><div class="spinner"></div><p>جارٍ تحميل البيانات...</p></div>
+    </div>
+    <button class="fab" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+  </div>
+
+  <!-- ================= الصفحة الثانية: التواصل ================= -->
+  <div class="page" id="contactPage">
+    <div class="header">
+      <div class="header-top">
+        <div class="logo-area">
+          <img class="logo-img" src="logo.png" alt="شعار الراكة">
+          <div class="logo-text">
+            <h1>تواصل معنا</h1>
+            <p>جمعية الراكة الدعوية</p>
+          </div>
+        </div>
+        <div class="header-btns">
+          <button class="icon-btn" id="theme-btn-contact" onclick="toggleTheme()" title="تغيير الثيم">☀️</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="contact-container">
+      <div class="contact-header-block">
+        <h2>قنوات الاتصال الرسمية</h2>
+        <p>يسعدنا تواصلكم معنا عبر المنصات التالية</p>
+      </div>
+
+      <!-- متجر الجمعية -->
+      <a href="https://store.dawah-rakah.org.sa/" target="_blank" class="contact-row-btn">
+        <div class="contact-icon-wrapper bg-store">🛒</div>
+        <div class="contact-info-text">
+          <span class="contact-label">الموقع الإلكتروني والمنصة</span>
+          <span class="contact-value">store.dawah-rakah.org.sa</span>
+        </div>
+      </a>
+
+      <!-- واتساب -->
+      <a href="https://wa.me/966557584477" target="_blank" class="contact-row-btn">
+        <div class="contact-icon-wrapper bg-whatsapp">💬</div>
+        <div class="contact-info-text">
+          <span class="contact-label">واتساب الجمعية</span>
+          <span class="contact-value">0557584477</span>
+        </div>
+      </a>
+
+      <!-- اتصال هاتفي -->
+      <a href="tel:0580956015" class="contact-row-btn">
+        <div class="contact-icon-wrapper bg-phone">📞</div>
+        <div class="contact-info-text">
+          <span class="contact-label">رقم الاتصال المباشر</span>
+          <span class="contact-value">058 095 6015</span>
+        </div>
+      </a>
+
+      <!-- تويتر / إكس -->
+      <a href="https://twitter.com/TawnieRaka" target="_blank" class="contact-row-btn">
+        <div class="contact-icon-wrapper bg-twitter">🐦</div>
+        <div class="contact-info-text">
+          <span class="contact-label">منصة X (تويتر سابقاً)</span>
+          <span class="contact-value">@TawnieRaka</span>
+        </div>
+      </a>
+
+      <!-- فيسبوك -->
+      <a href="https://www.facebook.com/Alrakah1445" target="_blank" class="contact-row-btn">
+        <div class="contact-icon-wrapper bg-facebook">📘</div>
+        <div class="contact-info-text">
+          <span class="contact-label">حساب الفيسبوك</span>
+          <span class="contact-value">Alrakah1445</span>
+        </div>
+      </a>
+
+      <!-- يوتيوب -->
+      <a href="https://www.youtube.com/channel/UCW-ewVbC8vGdOf2cV9JgmtA" target="_blank" class="contact-row-btn">
+        <div class="contact-icon-wrapper bg-youtube">📺</div>
+        <div class="contact-info-text">
+          <span class="contact-label">قناة اليوتيوب</span>
+          <span class="contact-value">جمعية الراكة الدعوية</span>
+        </div>
+      </a>
+
     </div>
   </div>
-  <div class="stats-bar">
-    <div class="stat-chip"><div class="num" id="s1">—</div><div class="lbl">كلمة قادمة</div></div>
-    <div class="stat-chip"><div class="num" id="s2">—</div><div class="lbl">جاهز الإعلان</div></div>
-  </div>
+
 </div>
 
-<div class="controls">
-  <input class="search-box" type="text" placeholder="🔍  بحث بالعنوان أو الشيخ أو الموقع..." id="q" oninput="render()">
-  <button class="filter-btn" id="fb" onclick="toggleFilter()">بدون إعلان</button>
+<!-- ===== شريط التنقل السفلي الثابت ===== -->
+<div class="bottom-nav">
+  <button class="nav-item active" id="btnNavLessons" onclick="switchPage('lessons')">
+    <i>📚</i>
+    <span>الدروس</span>
+  </button>
+  <button class="nav-item" id="btnNavContact" onclick="switchPage('contact')">
+    <i>📞</i>
+    <span>للتواصل</span>
+  </button>
 </div>
 
-<div id="content">
-  <div class="loading"><div class="spinner"></div><p>جارٍ تحميل البيانات...</p></div>
-</div>
-<button class="fab" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
-
+<!-- النافذة المنبثقة للصور -->
 <div id="imageModal" class="image-modal" onclick="closeImage()">
   <button class="close-modal">&times;</button>
   <img id="modalImg" class="modal-content" src="" alt="الإعلان بالحجم الكامل" onclick="event.stopPropagation()">
@@ -206,18 +428,45 @@ body{font-family:'Tajawal',sans-serif;background:var(--bg);color:var(--text);min
 const SID = '1dmh2EZ0BoFR-352eK4tqEezqzyRKIi_9bOMDmZogk6w';
 let rows = [], noDesignOnly = false;
 
+// ===== التنقل بين الصفحات بشكل منزلق =====
+function switchPage(pageName) {
+  const container = document.getElementById('appContainer');
+  const btnLessons = document.getElementById('btnNavLessons');
+  const btnContact = document.getElementById('btnNavContact');
+  
+  if (pageName === 'lessons') {
+    container.style.transform = 'translateX(0%)';
+    btnLessons.classList.add('active');
+    btnContact.classList.remove('active');
+    window.scrollTo({top: 0});
+  } else if (pageName === 'contact') {
+    container.style.transform = 'translateX(50%)'; // ينزلق لليمين بمرونة وسلاسة
+    btnContact.classList.add('active');
+    btnLessons.classList.remove('active');
+    window.scrollTo({top: 0});
+  }
+}
+
 // ===== الثيم =====
 function initTheme() {
   const saved = localStorage.getItem('theme') || 'dark';
   document.documentElement.setAttribute('data-theme', saved);
-  document.getElementById('theme-btn').textContent = saved === 'dark' ? '☀️' : '🌙';
+  const icon = saved === 'dark' ? '☀️' : '🌙';
+  document.getElementById('theme-btn').textContent = icon;
+  if(document.getElementById('theme-btn-contact')) {
+    document.getElementById('theme-btn-contact').textContent = icon;
+  }
 }
 function toggleTheme() {
   const curr = document.documentElement.getAttribute('data-theme');
   const next = curr === 'dark' ? 'light' : 'dark';
   document.documentElement.setAttribute('data-theme', next);
   localStorage.setItem('theme', next);
-  document.getElementById('theme-btn').textContent = next === 'dark' ? '☀️' : '🌙';
+  const icon = next === 'dark' ? '☀️' : '🌙';
+  document.getElementById('theme-btn').textContent = icon;
+  if(document.getElementById('theme-btn-contact')) {
+    document.getElementById('theme-btn-contact').textContent = icon;
+  }
 }
 initTheme();
 
@@ -262,7 +511,6 @@ async function loadData() {
       const gRaw = i => (c[i] && c[i].v != null) ? c[i].v : null;
       const gFmt = i => (c[i] && c[i].f != null) ? String(c[i].f).trim() : gVal(i);
 
-      // عمود G = index 6
       const eventDate = parseGregDate(String(gRaw(6) || ''), gFmt(6));
       if (!eventDate) continue;
 
@@ -281,7 +529,7 @@ async function loadData() {
       rows.push({
         diff, dateDisplay: gFmt(6) || gVal(6),
         type: gVal(1),
-        permitNum: gVal(2),   // رقم الفسح = عمود C
+        permitNum: gVal(2),
         title: gVal(3), sheikh: gVal(4),
         day: gVal(5), dateHijri: gVal(7),
         time: gVal(8), location: gVal(9),
@@ -344,7 +592,6 @@ function render() {
       ? `<a class="toggle-btn has" style="text-decoration:none" href="${r.designLink}" target="_blank">🔗 فتح الإعلان</a>`
       : `<span class="toggle-btn" style="opacity:.4;pointer-events:none">لا يوجد إعلان</span>`;
 
-    // تعديل هنا: عند الضغط على الصورة يتم تشغيل دالة openImage() لعرضها منبثقة داخل الصفحة
     const imgSec = r.imgUrl
       ? `<div class="design-section" id="ds${i}">
            <img class="design-img" src="${r.imgUrl}" title="اضغط لتكبير الإعلان"
@@ -395,7 +642,6 @@ function toggleImg(e,i) {
     ? '🖼️ إخفاء الإعلان ▴' : '🖼️ عرض الإعلان ▾';
 }
 
-// دالتين للتحكم في فتح وإغلاق الصورة المنبثقة
 function openImage(url) {
   const modal = document.getElementById('imageModal');
   const modalImg = document.getElementById('modalImg');
