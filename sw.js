@@ -1,8 +1,15 @@
 const CACHE = 'rakah-v1';
-const ASSETS = ['./index.html', './manifest.json'];
+const ASSETS = [
+  '/klimat/',
+  '/klimat/index.html',
+  '/klimat/manifest.json',
+  '/klimat/logo.png'
+];
 
 self.addEventListener('install', e => {
-  e.waitUntil(caches.open(CACHE).then(c => c.addAll(ASSETS)));
+  e.waitUntil(
+    caches.open(CACHE).then(c => c.addAll(ASSETS))
+  );
 });
 
 self.addEventListener('fetch', e => {
