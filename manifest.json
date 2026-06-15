@@ -2,25 +2,25 @@
   "name": "الكلمات القادمة - جمعية الراكة",
   "short_name": "جمعية الراكة",
   "description": "جدول الكلمات والمحاضرات القادمة للقسم الإعلامي",
-  "start_url": "./index.html",
+  "start_url": "/klimat/",
   "display": "standalone",
   "background_color": "#0f0f1a",
   "theme_color": "#1a1a2e",
   "orientation": "portrait",
   "lang": "ar",
   "dir": "rtl",
-"icons": [
-  {
-    "src": "./logo.png",
-    "sizes": "192x192",
-    "type": "image/png",
-    "purpose": "any maskable"
-  },
-  {
-    "src": "./logo.png",
-    "sizes": "512x512",
-    "type": "image/png",
-    "purpose": "any maskable"
-  }
-]
+  "icons": [
+    {
+      "src": "logo.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "logo.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
 }
