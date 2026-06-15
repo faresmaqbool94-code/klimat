@@ -2,7 +2,7 @@
 <html lang="ar" dir="rtl" data-theme="dark">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="theme-color" content="#1a1a2e">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -44,18 +44,19 @@
 *{margin:0;padding:0;box-sizing:border-box;}
 body{font-family:'Tajawal',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;transition:background .3s,color .3s;overflow-x:hidden;}
 
-/* ===== هيكل الصفحات المنزلقة ===== */
+/* ===== هيكل الصفحات المنزلقة - الحل الاحترافي ===== */
 .app-container {
   display: flex;
-  width: 200%;
+  width: 100%;
+  overflow: hidden;
   min-height: 100vh;
   transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 .page {
-  width: 50%;
+  width: 100%;
   flex-shrink: 0;
   box-sizing: border-box;
-  padding-bottom: 80px; /* مساحة للبار السفلي */
+  padding-bottom: 90px; /* تعديل: مساحة أكبر للبار السفلي */
 }
 
 /* ===== الهيدر ===== */
@@ -77,8 +78,8 @@ body{font-family:'Tajawal',sans-serif;background:var(--bg);color:var(--text);min
 .stat-chip .num{font-size:18px;font-weight:800;color:#fff;line-height:1;}
 .stat-chip .lbl{font-size:10px;color:rgba(255,255,255,0.7);margin-top:2px;}
 
-/* ===== بحث وفلتر ===== */
-.controls{padding:10px 166px; padding:10px 16px; display:flex;gap:8px;}
+/* ===== بحث وفلتر - تم إصلاح padding للجوال ===== */
+.controls{padding:10px 16px; display:flex;gap:8px;}
 .search-box{flex:1;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:10px 14px;color:var(--text);font-family:'Tajawal',sans-serif;font-size:14px;outline:none;transition:border-color .2s;}
 .search-box:focus{border-color:var(--accent);}
 .search-box::placeholder{color:var(--text-muted);}
@@ -296,7 +297,7 @@ body{font-family:'Tajawal',sans-serif;background:var(--bg);color:var(--text);min
     <div class="header">
       <div class="header-top">
         <div class="logo-area">
-          <img class="logo-img" src="logo.png" alt="شعار الراكة">
+          <img class="logo-img" src="logo.png" alt="شعار الراكة" onerror="this.src='https://placehold.co/42x42?text=ر'">
           <div class="logo-text">
             <h1>كلمات ودروس الراكة</h1>
             <p id="last-update">جمعية الراكة الدعوية</p>
@@ -329,7 +330,7 @@ body{font-family:'Tajawal',sans-serif;background:var(--bg);color:var(--text);min
     <div class="header">
       <div class="header-top">
         <div class="logo-area">
-          <img class="logo-img" src="logo.png" alt="شعار الراكة">
+          <img class="logo-img" src="logo.png" alt="شعار الراكة" onerror="this.src='https://placehold.co/42x42?text=ر'">
           <div class="logo-text">
             <h1>تواصل معنا</h1>
             <p>جمعية الراكة الدعوية</p>
@@ -428,7 +429,7 @@ body{font-family:'Tajawal',sans-serif;background:var(--bg);color:var(--text);min
 const SID = '1dmh2EZ0BoFR-352eK4tqEezqzyRKIi_9bOMDmZogk6w';
 let rows = [], noDesignOnly = false;
 
-// ===== التنقل بين الصفحات بشكل منزلق =====
+// ===== التنقل بين الصفحات بشكل منزلق - الحل الاحترافي =====
 function switchPage(pageName) {
   const container = document.getElementById('appContainer');
   const btnLessons = document.getElementById('btnNavLessons');
@@ -440,7 +441,7 @@ function switchPage(pageName) {
     btnContact.classList.remove('active');
     window.scrollTo({top: 0});
   } else if (pageName === 'contact') {
-    container.style.transform = 'translateX(50%)'; // ينزلق لليمين بمرونة وسلاسة
+    container.style.transform = 'translateX(-100%)'; // حركة دقيقة 100%
     btnContact.classList.add('active');
     btnLessons.classList.remove('active');
     window.scrollTo({top: 0});
@@ -452,10 +453,10 @@ function initTheme() {
   const saved = localStorage.getItem('theme') || 'dark';
   document.documentElement.setAttribute('data-theme', saved);
   const icon = saved === 'dark' ? '☀️' : '🌙';
-  document.getElementById('theme-btn').textContent = icon;
-  if(document.getElementById('theme-btn-contact')) {
-    document.getElementById('theme-btn-contact').textContent = icon;
-  }
+  const themeBtn = document.getElementById('theme-btn');
+  const themeBtnContact = document.getElementById('theme-btn-contact');
+  if(themeBtn) themeBtn.textContent = icon;
+  if(themeBtnContact) themeBtnContact.textContent = icon;
 }
 function toggleTheme() {
   const curr = document.documentElement.getAttribute('data-theme');
@@ -463,10 +464,10 @@ function toggleTheme() {
   document.documentElement.setAttribute('data-theme', next);
   localStorage.setItem('theme', next);
   const icon = next === 'dark' ? '☀️' : '🌙';
-  document.getElementById('theme-btn').textContent = icon;
-  if(document.getElementById('theme-btn-contact')) {
-    document.getElementById('theme-btn-contact').textContent = icon;
-  }
+  const themeBtn = document.getElementById('theme-btn');
+  const themeBtnContact = document.getElementById('theme-btn-contact');
+  if(themeBtn) themeBtn.textContent = icon;
+  if(themeBtnContact) themeBtnContact.textContent = icon;
 }
 initTheme();
 
@@ -554,8 +555,9 @@ async function loadData() {
 
 function toggleFilter() {
   noDesignOnly = !noDesignOnly;
-  document.getElementById('fb').classList.toggle('active', noDesignOnly);
-  document.getElementById('fb').textContent = noDesignOnly ? '✓ بدون إعلان' : 'بدون إعلان';
+  const fb = document.getElementById('fb');
+  fb.classList.toggle('active', noDesignOnly);
+  fb.textContent = noDesignOnly ? '✓ بدون إعلان' : 'بدون إعلان';
   render();
 }
 
@@ -587,75 +589,13 @@ function render() {
     const dayLbl = r.diff<=1?'':' يوم';
 
     const designBtn = r.imgUrl
-      ? `<button class="toggle-btn has" onclick="toggleImg(event,${i})">🖼️ عرض الإعلان ▾</button>`
+      ? `<button class="toggle-btn has" onclick="toggleImg(event,this)">🖼️ عرض الإعلان ▾</button>`
       : r.designLink
       ? `<a class="toggle-btn has" style="text-decoration:none" href="${r.designLink}" target="_blank">🔗 فتح الإعلان</a>`
       : `<span class="toggle-btn" style="opacity:.4;pointer-events:none">لا يوجد إعلان</span>`;
 
     const imgSec = r.imgUrl
-      ? `<div class="design-section" id="ds${i}">
+      ? `<div class="design-section" style="display:none">
            <img class="design-img" src="${r.imgUrl}" title="اضغط لتكبير الإعلان"
              onclick="openImage('${r.imgUrl}')"
-             onerror="this.outerHTML='<div style=padding:12px;text-align:center;font-size:12px;color:var(--text-muted)>⚠️ تعذّر عرض الصورة — <a href=${r.designLink} target=_blank style=color:var(--accent)>فتح الرابط</a></div>'"
-             loading="lazy">
-         </div>` : '';
-
-    html += `
-    <div class="card ${cc(r.diff)}">
-      <div class="card-header">
-        <div class="days-badge ${bc(r.diff)}">
-          <span class="dn">${dayTxt}</span>
-          <span class="dl">${dayLbl}</span>
-        </div>
-        <div class="card-info">
-          <div class="card-title">${r.title||'—'}</div>
-          ${r.permitNum?`<div class="permit-num">رقم الفسح: ${r.permitNum}</div>`:''}
-          <div class="card-meta">
-            ${r.sheikh?`<span class="meta-tag">🎤 ${r.sheikh}</span>`:''}
-            ${r.location?`<span class="meta-tag">📍 ${r.location}</span>`:''}
-            ${r.time?`<span class="meta-tag">🕐 ${r.time}</span>`:''}
-            ${r.type?`<span class="meta-tag">${r.type}</span>`:''}
-          </div>
-        </div>
-      </div>
-      ${imgSec}
-      <div class="design-wrap">
-        ${designBtn}
-        ${r.notes?`<span class="notes-chip">📝 ${r.notes}</span>`:''}
-      </div>
-      <div class="card-footer">
-        <div class="date-display">🗓️ ${r.dateHijri||''}${r.dateDisplay?' · '+r.dateDisplay:''}${r.day?' · '+r.day:''}</div>
-        ${r.designer?`<div class="designer-chip">🎨 ${r.designer}</div>`:''}
-      </div>
-    </div>`;
-  });
-
-  html += '</div>';
-  document.getElementById('content').innerHTML = html;
-}
-
-function toggleImg(e,i) {
-  const s = document.getElementById('ds'+i);
-  if (!s) return;
-  s.classList.toggle('open');
-  e.currentTarget.textContent = s.classList.contains('open')
-    ? '🖼️ إخفاء الإعلان ▴' : '🖼️ عرض الإعلان ▾';
-}
-
-function openImage(url) {
-  const modal = document.getElementById('imageModal');
-  const modalImg = document.getElementById('modalImg');
-  modalImg.src = url;
-  modal.classList.add('active');
-}
-
-function closeImage() {
-  const modal = document.getElementById('imageModal');
-  modal.classList.remove('active');
-}
-
-loadData();
-if('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(()=>{});
-</script>
-</body>
-</html>
+             onerror="this.outerHTML='<div style=padding
